@@ -1,0 +1,347 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>DAGR | Placar Ping Pong</title>
+
+  <style>
+    :root {
+      --pink: #FC1B82;
+      --black: #080808;
+      --panel: #151515;
+      --muted: #999999;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--black);
+      color: var(--white);
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 18px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 38px;
+    }
+
+    .brand {
+      color: var(--pink);
+      font-weight: 900;
+      font-size: 15px;
+      letter-spacing: 5px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 6vw, 46px);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: -1.5px;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .scoreboard {
+      width: 100%;
+      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .team {
+      background: var(--panel);
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 28px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .team-name {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #444;
+      color: var(--white);
+      font-size: clamp(17px, 3vw, 23px);
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+      padding: 8px 2px;
+      outline: none;
+    }
+
+    .team-name:focus {
+      border-color: var(--pink);
+    }
+
+    .score {
+      font-size: clamp(90px, 18vw, 150px);
+      line-height: 1.2;
+      font-weight: 900;
+      color: var(--pink);
+      font-variant-numeric: tabular-nums;
+      margin: 20px 0;
+    }
+
+    .add-button {
+      width: 100%;
+      max-width: 260px;
+      min-height: 68px;
+      border: none;
+      border-radius: 12px;
+      background: var(--pink);
+      color: white;
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.12s, background 0.12s;
+    }
+
+    .add-button:active {
+      transform: scale(0.96);
+      background: #d9146d;
+    }
+
+    .undo-button {
+      margin-top: 14px;
+      background: transparent;
+      border: 1px solid #555;
+      color: #aaa;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .undo-button:active {
+      background: #292929;
+    }
+
+    .reset-area {
+      margin-top: 26px;
+      text-align: center;
+    }
+
+    .reset-button {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid #444;
+      border-radius: 8px;
+      padding: 12px 22px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .reset-button:hover {
+      border-color: var(--pink);
+      color: var(--pink);
+    }
+
+    footer {
+      margin-top: 42px;
+      color: #555;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-align: center;
+    }
+
+    @media (max-width: 560px) {
+      body {
+        justify-content: flex-start;
+        padding-top: 45px;
+      }
+
+      header {
+        margin-bottom: 28px;
+      }
+
+      .scoreboard {
+        gap: 10px;
+      }
+
+      .team {
+        padding: 20px 10px;
+        border-radius: 13px;
+      }
+
+      .score {
+        margin: 24px 0;
+        font-size: clamp(75px, 20vw, 110px);
+      }
+
+      .add-button {
+        min-height: 60px;
+        font-size: 16px;
+      }
+
+      .undo-button {
+        padding: 9px 10px;
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="brand">DAGR ESPM</div>
+    <h1>Ping <span>Pong</span></h1>
+    <div class="subtitle">Placar oficial</div>
+  </header>
+
+  <main class="scoreboard">
+
+    <section class="team">
+      <input
+        class="team-name"
+        id="nameA"
+        type="text"
+        value="TIME 01"
+        maxlength="20"
+        aria-label="Nome do time 1"
+      >
+
+      <div class="score" id="scoreA">0</div>
+
+      <button class="add-button" id="addA">
+        + PONTO
+      </button>
+
+      <button class="undo-button" id="undoA">
+        ↶ Desfazer ponto
+      </button>
+    </section>
+
+    <section class="team">
+      <input
+        class="team-name"
+        id="nameB"
+        type="text"
+        value="TIME 02"
+        maxlength="20"
+        aria-label="Nome do time 2"
+      >
+
+      <div class="score" id="scoreB">0</div>
+
+      <button class="add-button" id="addB">
+        + PONTO
+      </button>
+
+      <button class="undo-button" id="undoB">
+        ↶ Desfazer ponto
+      </button>
+    </section>
+
+  </main>
+
+  <div class="reset-area">
+    <button class="reset-button" id="reset">
+      Zerar partida
+    </button>
+  </div>
+
+  <footer>
+    DIRETÓRIO ACADÊMICO · ESPM
+  </footer>
+
+  <script>
+    const teams = {
+      A: {
+        score: 0,
+        history: [],
+        element: document.getElementById("scoreA")
+      },
+      B: {
+        score: 0,
+        history: [],
+        element: document.getElementById("scoreB")
+      }
+    };
+
+    function updateScore(team) {
+      teams[team].element.textContent = teams[team].score;
+    }
+
+    function addPoint(team) {
+      teams[team].history.push(teams[team].score);
+      teams[team].score++;
+      updateScore(team);
+    }
+
+    function undoPoint(team) {
+      if (teams[team].history.length === 0) return;
+
+      teams[team].score = teams[team].history.pop();
+      updateScore(team);
+    }
+
+    document.getElementById("addA").addEventListener("click", () => {
+      addPoint("A");
+    });
+
+    document.getElementById("addB").addEventListener("click", () => {
+      addPoint("B");
+    });
+
+    document.getElementById("undoA").addEventListener("click", () => {
+      undoPoint("A");
+    });
+
+    document.getElementById("undoB").addEventListener("click", () => {
+      undoPoint("B");
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      const confirmed = confirm("Deseja realmente zerar a partida?");
+
+      if (!confirmed) return;
+
+      ["A", "B"].forEach(team => {
+        teams[team].score = 0;
+        teams[team].history = [];
+        updateScore(team);
+      });
+    });
+  </script>
+
+</body>
+</html>
